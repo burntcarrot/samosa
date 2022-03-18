@@ -9,6 +9,7 @@ import (
 
 type Options struct {
 	File string
+	Pkg  bool
 }
 
 func NewCmdRoot() *cobra.Command {
@@ -19,16 +20,19 @@ func NewCmdRoot() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVarP(&opts.File, "file", "f", "", "Coverage file path")
+	cmd.Flags().BoolVarP(&opts.Pkg, "pkg", "p", true, "Use package-based path")
 
 	return cmd
 }
 
 func (opts *Options) Run() error {
 	if opts.File != "" {
-		err := internal.GetCoverageData(opts.File, true)
+		fi, covered, total, err := internal.GetCoverageData(opts.File)
 		if err != nil {
-			log.Fatalln(err)
+			log.Fatalf("failed to get coverage data: %v\n", err)
 		}
+
+		internal.PrintTable(fi, covered, total, opts.Pkg)
 	}
 	return nil
 }

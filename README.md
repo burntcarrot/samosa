@@ -23,18 +23,20 @@ samosa -f <path to coverage file>
 Samosa returns the list of functions sorted by the impact associated with covering it:
 
 ```
-File                                                    Function                       Impact   Uncovered Lines Start Line      End Line
-...ub.com/deepsourcelabs/cli/utils/remote_resolver.go   ResolveRemote                  6.18     32              14              71
-...com/deepsourcelabs/cli/command/issues/list/list.go   Run                            4.44     23              76              118
-...com/deepsourcelabs/cli/command/issues/list/list.go   getIssuesData                  4.44     23              122             172
-github.com/deepsourcelabs/cli/config/config.go          WriteFile                      3.28     17              105             136
-...com/deepsourcelabs/cli/command/issues/list/list.go   NewCmdIssuesList               2.32     12              35              73
-...ithub.com/deepsourcelabs/cli/utils/fetch_remote.go   ListRemotes                    2.32     12              74              99
-...urcelabs/cli/utils/fetch_analyzers_transformers.go   GetAnalyzersAndTransformersData1.93     10              33              49
-...urcelabs/cli/utils/fetch_analyzers_transformers.go   parseSDKResponse               1.93     10              53              80
-...com/deepsourcelabs/cli/command/issues/list/list.go   showIssues                     1.93     10              176             193
+File                                                    Function        Impact  Uncovered Lines Start Line      End Line
+github.com/burntcarrot/samosa/internal/coverage.go      getFunctionInfo 19.15   18              46              84
+github.com/burntcarrot/samosa/internal/table.go         printTable      14.89   14              20              46
+github.com/burntcarrot/samosa/internal/coverage.go      coverage        13.83   13              127             152
+github.com/burntcarrot/samosa/internal/coverage.go      GetCoverageData 9.57    9               154             170
+github.com/burntcarrot/samosa/internal/coverage.go      getFunctions    7.45    7               87              104
+github.com/burntcarrot/samosa/internal/utils.go         sortFuncInfo    7.45    7               13              27
+github.com/burntcarrot/samosa/internal/utils.go         formatImpact    7.45    7               45              56
+github.com/burntcarrot/samosa/internal/coverage.go      Visit           6.38    6               106             124
+github.com/burntcarrot/samosa/internal/utils.go         getFilename     5.32    5               29              37
+github.com/burntcarrot/samosa/internal/coverage.go      getProfiles     4.26    4               36              43
+github.com/burntcarrot/samosa/internal/table.go         trimString      3.19    3               12              18
 ```
 
 ## Status
 
-Samosa is in development. New features will be added soon.
+Samosa is under development. New features will be added soon.

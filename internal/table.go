@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/pterm/pterm"
 )
@@ -16,7 +17,7 @@ func trimString(str string, limit int) string {
 	return str
 }
 
-func printTable(fi []*funcInfo, covered, total int, pkg bool) {
+func PrintTable(fi []*funcInfo, covered, total int, pkg bool) {
 	table := make([][]string, len(fi)+1)
 
 	table[0] = []string{"File", "Function", "Impact", "Uncovered Lines", "Start Line", "End Line"}
@@ -38,5 +39,8 @@ func printTable(fi []*funcInfo, covered, total int, pkg bool) {
 		table[i+1] = []string{trimString(fileName, TRIM_LIMIT), f.functionName, impactStr, fmt.Sprint(f.uncoveredLines), fmt.Sprint(f.startLine), fmt.Sprint(f.endLine)}
 	}
 
-	pterm.DefaultTable.WithSeparator("\t").WithData(table).WithHasHeader(true).Render()
+	err := pterm.DefaultTable.WithSeparator("\t").WithData(table).WithHasHeader(true).Render()
+	if err != nil {
+		log.Fatalf("failed to display results: %v\n", err)
+	}
 }

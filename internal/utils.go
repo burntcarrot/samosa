@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"errors"
 	"go/build"
 	"path/filepath"
 	"sort"
@@ -30,7 +29,7 @@ func getFilename(filePath string) (string, error) {
 	dir, file := filepath.Split(filePath)
 	pkg, err := build.Import(dir, ".", build.FindOnly)
 	if err != nil {
-		return "", errors.New("can't find file")
+		return "", err
 	}
 
 	return filepath.Join(pkg.Dir, file), nil

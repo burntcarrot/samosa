@@ -56,7 +56,7 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 			return nil, 0, 0, err
 		}
 
-		functions, err := findFuncs(filename)
+		functions, err := getFunctions(filename)
 		if err != nil {
 			return nil, 0, 0, err
 		}
@@ -83,8 +83,8 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 	return funcInfos, covered, total, nil
 }
 
-// findFuncs returns functions for a given file.
-func findFuncs(filename string) ([]*Function, error) {
+// getFunctions returns functions for a given file.
+func getFunctions(filename string) ([]*Function, error) {
 	fset := token.NewFileSet()
 	parsedFile, err := parser.ParseFile(fset, filename, nil, 0)
 	if err != nil {
@@ -151,20 +151,18 @@ func (f *Function) coverage(profile *cover.Profile) (int, int) {
 	return covered, total
 }
 
-func GetCoverageData(filePath string, pkg bool) error {
+func GetCoverageData(filePath string) ([]*funcInfo, int, int, error) {
 	profiles, err := getProfiles(filePath)
 	if err != nil {
-		return err
+		return nil, 0, 0, err
 	}
 
 	fi, covered, total, err := getFunctionInfo(profiles)
 	if err != nil {
-		return err
+		return nil, 0, 0, err
 	}
 
 	fi = sortFuncInfo(fi)
 
-	printTable(fi, covered, total, pkg)
-
-	return nil
+	return fi, covered, total, nil
 }
