@@ -20,7 +20,7 @@ func NewCmdRoot() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVarP(&opts.File, "file", "f", "", "Coverage file path")
-	cmd.Flags().BoolVarP(&opts.Pkg, "pkg", "p", true, "Use package-based path")
+	cmd.Flags().BoolVarP(&opts.Pkg, "pkg", "p", false, "Use package-based path")
 
 	return cmd
 }

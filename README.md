@@ -12,12 +12,20 @@ Samosa helps developers prioritize what needs to be tested.
 
 Samosa isn't a tool for developers who want to chase 100% coverage; instead, it provides a good way to prioritize which functions should be tested first.
 
+## Installation
+
+Using go get:
+
+```
+go get -u github.com/burntcarrot/samosa/...
+```
+
 ## Usage
 
 Run Samosa:
 
 ```
-samosa -f <path to coverage file>
+samosa -f <path to coverage file> --pkg
 ```
 
 Samosa returns the list of functions sorted by the impact associated with covering it:
