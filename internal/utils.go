@@ -3,9 +3,11 @@ package internal
 import (
 	"go/build"
 	"path/filepath"
+	"regexp"
 	"sort"
 
 	"github.com/fatih/color"
+	"github.com/thoas/go-funk"
 )
 
 // sortFuncInfo returns function information sorted by the number of uncovered lines.
@@ -23,6 +25,19 @@ func sortFuncInfo(fi []*funcInfo) []*funcInfo {
 	})
 
 	return filteredFuncInfos
+}
+
+func filterByRegex(pattern string, fi []*funcInfo) ([]*funcInfo, error) {
+	r, err := regexp.Compile(pattern)
+	if err != nil {
+		return nil, err
+	}
+
+	filteredFuncInfo := funk.Filter(fi, func(f *funcInfo) bool {
+		return r.Match([]byte(f.fileName))
+	}).([]*funcInfo)
+
+	return filteredFuncInfo, nil
 }
 
 func getFilename(filePath string) (string, error) {

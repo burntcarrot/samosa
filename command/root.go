@@ -8,8 +8,15 @@ import (
 )
 
 type Options struct {
-	File string
-	Pkg  bool
+	File          string
+	Pkg           bool
+	SortFile      bool
+	FilterOptions FilterOptions
+}
+
+type FilterOptions struct {
+	Include string
+	Exclude string
 }
 
 func NewCmdRoot() *cobra.Command {
@@ -20,18 +27,32 @@ func NewCmdRoot() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVarP(&opts.File, "file", "f", "", "Coverage file path")
+	cmd.Flags().StringVarP(&opts.FilterOptions.Include, "include", "i", "", "Include results for specified file")
+	cmd.Flags().StringVarP(&opts.FilterOptions.Exclude, "exclude", "e", "", "Exclude results for specified file")
 	cmd.Flags().BoolVarP(&opts.Pkg, "pkg", "p", false, "Use package-based path")
+	cmd.Flags().BoolVarP(&opts.SortFile, "sort-file", "s", false, "Sort results based on file path")
 
 	return cmd
 }
 
 func (opts *Options) Run() error {
-	if opts.File != "" {
-		fi, covered, total, err := internal.GetCoverageData(opts.File)
-		if err != nil {
-			log.Fatalf("failed to get coverage data: %v\n", err)
-		}
+	fi, covered, total, err := internal.GetCoverageData(opts.File)
+	if err != nil {
+		log.Fatalf("failed to get coverage data: %v\n", err)
+	}
 
+	filterOpts := internal.FilterOptions{
+		Include:  opts.FilterOptions.Include,
+		Exclude:  opts.FilterOptions.Exclude,
+		SortFile: opts.SortFile,
+	}
+
+	fi, err = internal.FilterFunctionInfo(fi, filterOpts)
+	if err != nil {
+		log.Fatalf("failed to get function info: %v\n", err)
+	}
+
+	if opts.File != "" {
 		internal.PrintTable(fi, covered, total, opts.Pkg)
 	}
 	return nil
