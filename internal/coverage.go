@@ -5,6 +5,7 @@ import (
 	"go/parser"
 	"go/token"
 
+	"github.com/thoas/go-funk"
 	"golang.org/x/tools/cover"
 )
 
@@ -30,6 +31,12 @@ type Visitor struct {
 	name    string
 	astFile *ast.File
 	funcs   []*Function
+}
+
+type FilterOptions struct {
+	Include  string
+	Exclude  string
+	SortFile bool
 }
 
 // getProfiles parses profile data in the specified file and returns the parsed profiles.
@@ -162,7 +169,34 @@ func GetCoverageData(filePath string) ([]*funcInfo, int, int, error) {
 		return nil, 0, 0, err
 	}
 
-	fi = sortFuncInfo(fi)
-
 	return fi, covered, total, nil
+}
+
+func FilterFunctionInfo(fi []*funcInfo, filterOpts FilterOptions) ([]*funcInfo, error) {
+	var filteredFuncInfo []*funcInfo
+	var err error
+
+	if filterOpts.Include != "" {
+		filteredFuncInfo, err = filterByRegex(filterOpts.Include, fi)
+		if err != nil {
+			return nil, err
+		}
+	} else if filterOpts.Exclude != "" {
+		filteredFuncInfo, err = filterByRegex(filterOpts.Exclude, fi)
+		if err != nil {
+			return nil, err
+		}
+
+		filteredFuncInfo = funk.Subtract(fi, filteredFuncInfo).([]*funcInfo)
+	} else {
+		filteredFuncInfo = fi
+	}
+
+	if !filterOpts.SortFile {
+		fi = sortFuncInfo(filteredFuncInfo)
+	} else {
+		fi = filteredFuncInfo
+	}
+
+	return fi, nil
 }
