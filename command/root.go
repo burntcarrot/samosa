@@ -60,13 +60,18 @@ func (opts *Options) Run() error {
 	if opts.File != "" {
 		switch strings.TrimSpace(opts.Export) {
 		case "json":
-			internal.ExportJSON(opts.OutputFile, fi)
+			err = internal.ExportJSON(opts.OutputFile, fi)
 		case "csv":
-			internal.ExportCSV(opts.OutputFile, fi)
+			err = internal.ExportCSV(opts.OutputFile, fi)
 		default:
 			internal.PrintTable(fi, covered, total, opts.Pkg)
 		}
 	}
+
+	if err != nil {
+		log.Fatalf("failed to export results: %v\n", err)
+	}
+
 	return nil
 }
 

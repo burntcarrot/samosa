@@ -67,8 +67,8 @@ func ExportCSV(filename string, fi []*funcInfo) error {
 
 	if filename == "" {
 		w := csv.NewWriter(os.Stdout)
-		w.WriteAll(records)
-		if err := w.Error(); err != nil {
+		err := w.WriteAll(records)
+		if err != nil {
 			return err
 		}
 		return nil
@@ -80,8 +80,8 @@ func ExportCSV(filename string, fi []*funcInfo) error {
 	}
 
 	w := csv.NewWriter(file)
-	w.WriteAll(records)
-	if err := w.Error(); err != nil {
+	err = w.WriteAll(records)
+	if err != nil {
 		return err
 	}
 
