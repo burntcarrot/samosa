@@ -2,6 +2,7 @@ package command
 
 import (
 	"log"
+	"strings"
 
 	"github.com/burntcarrot/samosa/internal"
 	"github.com/spf13/cobra"
@@ -9,6 +10,8 @@ import (
 
 type Options struct {
 	File          string
+	Export        string
+	OutputFile    string
 	Pkg           bool
 	SortFile      bool
 	FilterOptions FilterOptions
@@ -28,7 +31,9 @@ func NewCmdRoot() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&opts.File, "file", "f", "", "Coverage file path")
 	cmd.Flags().StringVarP(&opts.FilterOptions.Include, "include", "i", "", "Include results for specified file")
-	cmd.Flags().StringVarP(&opts.FilterOptions.Exclude, "exclude", "e", "", "Exclude results for specified file")
+	cmd.Flags().StringVarP(&opts.FilterOptions.Exclude, "exclude", "x", "", "Exclude results for specified file")
+	cmd.Flags().StringVarP(&opts.OutputFile, "output", "o", "", "Output filename for exporting results")
+	cmd.Flags().StringVarP(&opts.Export, "export", "e", "", "Export results to CSV, JSON, etc.")
 	cmd.Flags().BoolVarP(&opts.Pkg, "pkg", "p", false, "Use package-based path")
 	cmd.Flags().BoolVarP(&opts.SortFile, "sort-file", "s", false, "Sort results based on file path")
 
@@ -53,7 +58,14 @@ func (opts *Options) Run() error {
 	}
 
 	if opts.File != "" {
-		internal.PrintTable(fi, covered, total, opts.Pkg)
+		switch strings.TrimSpace(opts.Export) {
+		case "json":
+			internal.ExportJSON(opts.OutputFile, fi)
+		case "csv":
+			internal.ExportCSV(opts.OutputFile, fi)
+		default:
+			internal.PrintTable(fi, covered, total, opts.Pkg)
+		}
 	}
 	return nil
 }
