@@ -12,6 +12,15 @@ Samosa helps developers prioritize what needs to be tested.
 
 Samosa isn't a tool for developers who want to chase 100% coverage; instead, it provides a good way to prioritize which functions should be tested first.
 
+## Features
+
+With Samosa, you can:
+
+- Get the list of functions sorted by the impact of covering it. `((covered + uncovered lines) / total lines) / total coverage`
+- Sort files based on file paths.
+- Exclude and include files.
+- Export results to CSV, JSON, etc.
+
 ## Installation
 
 Using go get:
@@ -21,6 +30,22 @@ go get -u github.com/burntcarrot/samosa/...
 ```
 
 ## Usage
+
+```
+$ samosa --help
+Usage:
+   [flags]
+
+Flags:
+  -x, --exclude string   Exclude results for specified file
+  -e, --export string    Export results to CSV, JSON, etc.
+  -f, --file string      Coverage file path
+  -h, --help             help for this command
+  -i, --include string   Include results for specified file
+  -o, --output string    Output filename for exporting results
+  -p, --pkg              Use package-based path
+  -s, --sort-file        Sort results based on file path
+```
 
 Run Samosa:
 
@@ -45,6 +70,38 @@ github.com/burntcarrot/samosa/internal/coverage.go      getProfiles     4.26    
 github.com/burntcarrot/samosa/internal/table.go         trimString      3.19    3               12              18
 ```
 
-## Status
+Samosa allows exporting results to CSV, JSON, etc.
 
-Samosa is under development. New features will be added soon.
+```
+$ samosa -f coverage.out -e csv -o test.csv
+ INFO  Saved results to test.csv!
+
+$ tv test.csv
+
+      tv dim: 10 x 6
+      file                 pkg_file             function           start_line end_line uncovered_lines
+1     /home/aadhav/projec… github.com/burntcar… PrintTable         20         46       14
+2     /home/aadhav/projec… github.com/burntcar… filterByRegex      30         41       8
+3     /home/aadhav/projec… github.com/burntcar… sortFuncInfo       14         28       7
+4     /home/aadhav/projec… github.com/burntcar… GetCoverageData    161        173      3
+5     /home/aadhav/projec… github.com/burntcar… coverage           134        159      2
+6     /home/aadhav/projec… github.com/burntcar… FilterFunctionInfo 175        202      2
+7     /home/aadhav/projec… github.com/burntcar… getFunctionInfo    53         91       2
+8     /home/aadhav/projec… github.com/burntcar… getFilename        43         51       2
+9     /home/aadhav/projec… github.com/burntcar… getFunctions       94         111      1
+10    /home/aadhav/projec… github.com/burntcar… formatImpact       59         70       1
+```
+
+## Screenshots
+
+Running samosa on [valyala/fasthttp](https://gist.github.com/burntcarrot/5985297bba960030c818ef2e194e3a8b):
+
+![Preview](assets/fasthttp-preview.png)
+
+More examples:
+
+- [kubernetes/klog](https://gist.github.com/burntcarrot/8b7f42f2aac733056e285b8e973ac967)
+
+## License
+
+Samosa is licensed under the MIT License.
