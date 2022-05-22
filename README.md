@@ -16,7 +16,7 @@ Samosa isn't a tool for developers who want to chase 100% coverage; instead, it 
 
 With Samosa, you can:
 
-- Get the list of functions sorted by the impact of covering it. `((covered + uncovered lines) / total lines) / total coverage`
+- Get the list of functions sorted by the impact of covering it. (see [impact](#impact))
 - Sort files based on file paths.
 - Exclude and include files.
 - Export results to CSV, JSON, etc.
@@ -26,7 +26,7 @@ With Samosa, you can:
 Using go get:
 
 ```
-go get -u github.com/burntcarrot/samosa/...
+go install -v github.com/burntcarrot/samosa/cmd/samosa@latest
 ```
 
 ## Usage
@@ -101,6 +101,14 @@ Running samosa on [valyala/fasthttp](https://gist.github.com/burntcarrot/5985297
 More examples:
 
 - [kubernetes/klog](https://gist.github.com/burntcarrot/8b7f42f2aac733056e285b8e973ac967)
+
+## Impact
+
+Impact = `((total covered lines + uncovered lines in function) / total number of lines)) - total coverage`
+
+Which is equivalent to:
+
+Impact = Coverage after covering the function - old coverage
 
 ## License
 
