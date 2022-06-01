@@ -1,10 +1,13 @@
 package internal
 
 import (
+	"fmt"
 	"go/build"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/thoas/go-funk"
@@ -42,12 +45,46 @@ func filterByRegex(pattern string, fi []*funcInfo) ([]*funcInfo, error) {
 
 func getFilename(filePath string) (string, error) {
 	dir, file := filepath.Split(filePath)
-	pkg, err := build.Import(dir, ".", build.FindOnly)
-	if err != nil {
-		return "", err
-	}
+	var pkg *build.Package
+	var err error
+	fext := strings.Split(file, ".")[1]
+	if strings.EqualFold(fext, "go") {
+		pkg, err = build.Import(strings.TrimSuffix(dir, "/"), ".", build.FindOnly)
+		if err != nil {
+			if strings.Contains(err.Error(), "go get") {
+				if err := importModule(strings.TrimSuffix(dir, "/")); err != nil {
+					return "", err
+				}
+			}
+			return "", err
+		}
 
+	} else {
+		pkg, err = build.ImportDir(dir, build.FindOnly)
+		if err != nil {
+			pkg, err = build.Import(dir, ".", build.FindOnly)
+			if err != nil {
+				if strings.Contains(err.Error(), "add") {
+					if err := importModule(strings.TrimSuffix(dir, "/")); err != nil {
+						return "", err
+					}
+					return "", err
+				}
+
+			}
+			return "", err
+		}
+	}
 	return filepath.Join(pkg.Dir, file), nil
+}
+
+func importModule(s string) error {
+	cmd := exec.Command("go")
+	cmd.Args = append(cmd.Args, "get", fmt.Sprintf("%s@latest", s))
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	return nil
 }
 
 // calculateCoverage returns coverage in float64.
