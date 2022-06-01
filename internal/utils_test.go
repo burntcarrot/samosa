@@ -26,3 +26,17 @@ func TestCalculateCoverage(t *testing.T) {
 		})
 	}
 }
+func Test_get_file_name(t *testing.T) {
+	t.Run("modulepath", func(t *testing.T) {
+		_, err := getFilename("github.com/web-alytics/meditate/pkg/logging/logging.go")
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+	t.Run("localfilepath", func(t *testing.T) {
+		_, err := getFilename("./testdata/test_coverage.out")
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+}
