@@ -45,6 +45,7 @@ func filterByRegex(pattern string, fi []*funcInfo) ([]*funcInfo, error) {
 
 func getFilename(filePath string) (string, error) {
 	dir, file := filepath.Split(filePath)
+	// TODO: refactor this to simpler approach
 	var pkg *build.Package
 	var err error
 	fext := strings.Split(file, ".")[1]
@@ -62,7 +63,7 @@ func getFilename(filePath string) (string, error) {
 	} else {
 		pkg, err = build.ImportDir(dir, build.FindOnly)
 		if err != nil {
-			pkg, err = build.Import(dir, ".", build.FindOnly)
+			_, err = build.Import(dir, ".", build.FindOnly)
 			if err != nil {
 				if strings.Contains(err.Error(), "add") {
 					if err := importModule(strings.TrimSuffix(dir, "/")); err != nil {
