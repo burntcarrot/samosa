@@ -43,32 +43,42 @@ func filterByRegex(pattern string, fi []*funcInfo) ([]*funcInfo, error) {
 	return filteredFuncInfo, nil
 }
 
+// TODO: better approach will be to use switch case
 func getFilename(filePath string) (string, error) {
 	dir, file := filepath.Split(filePath)
 	// TODO: refactor this to simpler approach
 	var pkg *build.Package
 	var err error
+	// check for file extn
 	fext := strings.Split(file, ".")[1]
 	if strings.EqualFold(fext, "go") {
+		// if the module is a dependency like log then use Import
 		pkg, err = build.Import(strings.TrimSuffix(dir, "/"), ".", build.FindOnly)
 		if err != nil {
+			// check if err message is due to missing module in repo
 			if strings.Contains(err.Error(), "go get") {
+				// fix missing import
 				if err := importModule(strings.TrimSuffix(dir, "/")); err != nil {
 					return "", err
 				}
 			}
+			// any other error return and fail
 			return "", err
 		}
 
 	} else {
+		// when file extn is not a dependency and it is a package use import dir
 		pkg, err = build.ImportDir(dir, build.FindOnly)
 		if err != nil {
+			// retry import if import dir fails
 			_, err = build.Import(dir, ".", build.FindOnly)
 			if err != nil {
+				// when err is missing pkg run go get
 				if strings.Contains(err.Error(), "add") {
 					if err := importModule(strings.TrimSuffix(dir, "/")); err != nil {
 						return "", err
 					}
+					// any other type err return and fail
 					return "", err
 				}
 
