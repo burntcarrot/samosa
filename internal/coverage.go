@@ -51,7 +51,7 @@ func getProfiles(filePath string) ([]*cover.Profile, error) {
 }
 
 // getFunctionInfo returns function information for profiles.
-func getFunctionInfo(profiles []*cover.Profile,modFilePath string) ([]*funcInfo, int, int, error) {
+func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 	total := 0
 	covered := 0
 	var funcInfos []*funcInfo
