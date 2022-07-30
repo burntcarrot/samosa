@@ -4,6 +4,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"path/filepath"
 
 	"github.com/thoas/go-funk"
 	"golang.org/x/tools/cover"
@@ -93,7 +94,8 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 // getFunctions returns functions for a given file.
 func getFunctions(filename string) ([]*Function, error) {
 	fset := token.NewFileSet()
-	parsedFile, err := parser.ParseFile(fset, filename, nil, 0)
+	baseFileName:=filepath.Base(filename)
+	parsedFile, err := parser.ParseFile(fset, baseFileName, nil, 0)
 	if err != nil {
 		return nil, err
 	}
