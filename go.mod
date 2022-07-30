@@ -1,4 +1,4 @@
-module github.com/burntcarrot/samosa
+module github.com/ehrktia/samosa
 
 go 1.17
 
