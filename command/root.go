@@ -4,7 +4,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/burntcarrot/samosa/internal"
+	"github.com/ehrktia/samosa/internal"
 	"github.com/spf13/cobra"
 )
 

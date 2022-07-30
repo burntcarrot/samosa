@@ -51,7 +51,7 @@ func getProfiles(filePath string) ([]*cover.Profile, error) {
 }
 
 // getFunctionInfo returns function information for profiles.
-func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
+func getFunctionInfo(profiles []*cover.Profile,modFilePath string) ([]*funcInfo, int, int, error) {
 	total := 0
 	covered := 0
 	var funcInfos []*funcInfo
@@ -64,7 +64,7 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 		if err != nil {
 			return nil, 0, 0, err
 		}
-		fmt.Printf("debug filename:%v\n",filename)
+		fmt.Printf("debug filename:%v\n", filename)
 
 		functions, err := getFunctions(filename)
 		if err != nil {
@@ -161,8 +161,8 @@ func (f *Function) coverage(profile *cover.Profile) (int, int) {
 	return covered, total
 }
 
-func GetCoverageData(filePath string) ([]*funcInfo, int, int, error) {
-	profiles, err := getProfiles(filePath)
+func GetCoverageData(coverageFilePath, modFilePath string) ([]*funcInfo, int, int, error) {
+	profiles, err := getProfiles(coverageFilePath)
 	if err != nil {
 		return nil, 0, 0, err
 	}

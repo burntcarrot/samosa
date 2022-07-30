@@ -28,7 +28,7 @@ func TestCalculateCoverage(t *testing.T) {
 }
 func Test_get_file_name(t *testing.T) {
 	t.Run("modulepath", func(t *testing.T) {
-		_, err := getFilename("github.com/web-alytics/meditate/pkg/logging/logging.go")
+		_, err := getFilename("github.com/ehrktia/venn")
 		if err != nil {
 			t.Fatal(err)
 		}
