@@ -45,3 +45,18 @@ func TestGetCoverageData(t *testing.T) {
 		assert.NotNil(t, err)
 	})
 }
+
+// func TestGetFileFunctions(t *testing.T) {
+// got, err := getProfiles("./testdata/test_coverage.out")
+// if err != nil {
+// t.Fatal(err)
+// }
+// fname, start, end, err := getFunctionInfo(got)
+// t.Logf("%v\n", start)
+// t.Logf("%v\n", end)
+// t.Logf("%v\n", err)
+// for _, f := range fname {
+// t.Logf("%v\n", f.functionName)
+// }
+//
+// }

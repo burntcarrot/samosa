@@ -1,10 +1,10 @@
 package internal
 
 import (
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"path/filepath"
 
 	"github.com/thoas/go-funk"
 	"golang.org/x/tools/cover"
@@ -58,11 +58,13 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 
 	for _, profile := range profiles {
 		name := profile.FileName
+		// name := filepath.Base(profile.FileName)
 
 		filename, err := getFilename(name)
 		if err != nil {
 			return nil, 0, 0, err
 		}
+		fmt.Printf("debug filename:%v\n",filename)
 
 		functions, err := getFunctions(filename)
 		if err != nil {
@@ -94,8 +96,7 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 // getFunctions returns functions for a given file.
 func getFunctions(filename string) ([]*Function, error) {
 	fset := token.NewFileSet()
-	baseFileName:=filepath.Base(filename)
-	parsedFile, err := parser.ParseFile(fset, baseFileName, nil, 0)
+	parsedFile, err := parser.ParseFile(fset, filename, nil, 0)
 	if err != nil {
 		return nil, err
 	}
