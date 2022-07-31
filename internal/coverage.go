@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -64,7 +63,6 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 		if err != nil {
 			return nil, 0, 0, err
 		}
-		fmt.Printf("debug filename:%v\n", filename)
 
 		functions, err := getFunctions(filename)
 		if err != nil {
@@ -161,7 +159,7 @@ func (f *Function) coverage(profile *cover.Profile) (int, int) {
 	return covered, total
 }
 
-func GetCoverageData(coverageFilePath, modFilePath string) ([]*funcInfo, int, int, error) {
+func GetCoverageData(coverageFilePath string) ([]*funcInfo, int, int, error) {
 	profiles, err := getProfiles(coverageFilePath)
 	if err != nil {
 		return nil, 0, 0, err
