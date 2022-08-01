@@ -10,9 +10,6 @@ func Test_parse(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(testOut)<1{
-		t.Fatal("expected to get a dataset with coverage")
-	}
 }
 
 func Test_coverage(t *testing.T) {

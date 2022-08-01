@@ -25,12 +25,12 @@ func TestGetProfiles(t *testing.T) {
 
 func TestGetFunctionInfo(t *testing.T) {
 	// t.Run("must return function info for valid profiles", func(t *testing.T) {
-		// profiles, _ := cover.ParseProfiles("./testdata/test_coverage.out")
-		// funcInfo, covered, total, err := getFunctionInfo(profiles)
-		// assert.Nil(t, err)
-		// assert.NotNil(t, funcInfo)
-		// assert.Zero(t, covered) // the test data has 0 covered lines
-		// assert.NotZero(t, total)
+	// profiles, _ := cover.ParseProfiles("./testdata/test_coverage.out")
+	// funcInfo, covered, total, err := getFunctionInfo(profiles)
+	// assert.Nil(t, err)
+	// assert.NotNil(t, funcInfo)
+	// assert.Zero(t, covered) // the test data has 0 covered lines
+	// assert.NotZero(t, total)
 	// })
 }
 
