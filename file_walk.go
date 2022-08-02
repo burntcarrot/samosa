@@ -88,6 +88,7 @@ func (f *Function) coverage(profile *cover.Profile) (int, int) {
 }
 
 func getProfiles(coverageFilePath string) ([]*cover.Profile, error) {
+	fmt.Print("starting to get profiles .....")
 	profiles, err := cover.ParseProfiles(coverageFilePath)
 	if err != nil {
 		return nil, err
