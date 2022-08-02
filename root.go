@@ -1,12 +1,17 @@
-package command
+package samosa
 
 import (
 	"log"
 	"strings"
 
-	"github.com/ehrktia/samosa/internal"
 	"github.com/spf13/cobra"
 )
+
+type FilterOptions struct {
+	Include  string
+	Exclude  string
+	SortFile bool
+}
 
 type Options struct {
 	File          string
@@ -15,11 +20,6 @@ type Options struct {
 	Pkg           bool
 	SortFile      bool
 	FilterOptions FilterOptions
-}
-
-type FilterOptions struct {
-	Include string
-	Exclude string
 }
 
 func NewCmdRoot() *cobra.Command {
@@ -41,18 +41,18 @@ func NewCmdRoot() *cobra.Command {
 }
 
 func (opts *Options) Run() error {
-	fi, covered, total, err := internal.GetCoverageData(opts.File)
+	fi, covered, total, err := GetCoverageData(opts.File)
 	if err != nil {
 		log.Fatalf("failed to get coverage data: %v\n", err)
 	}
 
-	filterOpts := internal.FilterOptions{
+	filterOpts := FilterOptions{
 		Include:  opts.FilterOptions.Include,
 		Exclude:  opts.FilterOptions.Exclude,
 		SortFile: opts.SortFile,
 	}
 
-	fi, err = internal.FilterFunctionInfo(fi, filterOpts)
+	fi, err = FilterFunctionInfo(fi, filterOpts)
 	if err != nil {
 		log.Fatalf("failed to get function info: %v\n", err)
 	}
@@ -60,11 +60,11 @@ func (opts *Options) Run() error {
 	if opts.File != "" {
 		switch strings.TrimSpace(opts.Export) {
 		case "json":
-			err = internal.ExportJSON(opts.OutputFile, fi)
+			err = ExportJSON(opts.OutputFile, fi)
 		case "csv":
-			err = internal.ExportCSV(opts.OutputFile, fi)
+			err = ExportCSV(opts.OutputFile, fi)
 		default:
-			internal.PrintTable(fi, covered, total, opts.Pkg)
+			PrintTable(fi, covered, total, opts.Pkg)
 		}
 	}
 

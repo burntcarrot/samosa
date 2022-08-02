@@ -35,9 +35,12 @@ func walkModDir(modfile string) ([]string, error) {
 
 }
 
-func getFileNames(profile *cover.Profile) string {
-	_, fname := filepath.Split(profile.FileName)
-	return fname
+func getFileNames() ([]string, error) {
+	fileDirs, err := walkDir()
+	if err != nil {
+		return nil, err
+	}
+	return fileDirs, nil
 }
 
 type Function struct {
@@ -53,6 +56,34 @@ type Visitor struct {
 	name    string
 	astFile *ast.File
 	funcs   []*Function
+}
+
+// coverage returns the number of covered and total lines.
+func (f *Function) coverage(profile *cover.Profile) (int, int) {
+	total := 0
+	covered := 0
+
+	for _, b := range profile.Blocks {
+		if b.StartLine > f.endLine || (b.StartLine == f.endLine && b.StartCol >= f.endCol) {
+			break
+		}
+
+		if b.EndLine < f.startLine || (b.EndLine == f.startLine && b.EndCol <= f.startCol) {
+			continue
+		}
+
+		total += b.NumStmt
+
+		if b.Count > 0 {
+			covered += b.NumStmt
+		}
+	}
+
+	if total == 0 {
+		total = 1
+	}
+
+	return covered, total
 }
 
 func getProfiles(coverageFilePath string) ([]*cover.Profile, error) {
@@ -119,78 +150,51 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 
 	for _, profile := range profiles {
 
-		filename := getFileNames(profile)
-
-		functions, err := getFunctions(filename)
+		filenames, err := getFileNames()
 		if err != nil {
 			return nil, 0, 0, err
 		}
+		for _, filename := range filenames {
 
-		for _, f := range functions {
-			c, t := f.coverage(profile)
-
-			fi := &funcInfo{
-				fileName:       filename,
-				pkgFileName:    filename,
-				functionName:   f.name,
-				startLine:      f.startLine,
-				endLine:        f.endLine,
-				uncoveredLines: t - c,
+			functions, err := getFunctions(filename)
+			if err != nil {
+				return nil, 0, 0, err
 			}
 
-			funcInfos = append(funcInfos, fi)
+			for _, f := range functions {
+				c, t := f.coverage(profile)
 
-			total += t
-			covered += c
+				fi := &funcInfo{
+					fileName:       filename,
+					pkgFileName:    filename,
+					functionName:   f.name,
+					startLine:      f.startLine,
+					endLine:        f.endLine,
+					uncoveredLines: t - c,
+				}
+
+				funcInfos = append(funcInfos, fi)
+				total += t
+				covered += c
+			}
+
 		}
 	}
 
 	return funcInfos, covered, total, nil
 }
 
-func (f *Function) coverage(profile *cover.Profile) (int, int) {
-	total := 0
-	covered := 0
-
-	for _, b := range profile.Blocks {
-		if b.StartLine > f.endLine || (b.StartLine == f.endLine && b.StartCol >= f.endCol) {
-			break
-		}
-
-		if b.EndLine < f.startLine || (b.EndLine == f.startLine && b.EndCol <= f.startCol) {
-			continue
-		}
-
-		total += b.NumStmt
-
-		if b.Count > 0 {
-			covered += b.NumStmt
-		}
-	}
-
-	if total == 0 {
-		total = 1
-	}
-
-	return covered, total
-}
-
-func walkDir() error {
+// walkDir gets list of go files in repo
+func walkDir() ([]string, error) {
+	var filesDir []string
 	// get mod dir
 	modeFile, err := getMod()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	dir, _ := filepath.Split(modeFile)
 	// walk dir
-	if err := filepath.Walk(dir, getFileDir()); err != nil {
-		return err
-	}
-	return nil
-}
-
-func getFileDir() filepath.WalkFunc {
-	return func(path string, info fs.FileInfo, err error) error {
+	if err := filepath.Walk(dir, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -200,23 +204,13 @@ func getFileDir() filepath.WalkFunc {
 		// filter files to go types
 		p := filterFiles(path)
 		if p != "" {
-			fset := token.NewFileSet()
-			parsedFile, err := parser.ParseFile(fset, p, nil, 0)
-			if err != nil {
-				return err
-			}
-
-			visitor := &Visitor{
-				fset:    fset,
-				name:    p,
-				astFile: parsedFile,
-			}
-
-			// traverse AST
-			ast.Walk(visitor, visitor.astFile)
+			filesDir = append(filesDir, p)
 		}
 		return nil
+	}); err != nil {
+		return nil, err
 	}
+	return filesDir, nil
 }
 
 func filterFiles(path string) string {

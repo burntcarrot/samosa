@@ -1,9 +1,10 @@
-package internal
+package samosa
 
 import (
 	"fmt"
 	"log"
 
+	"github.com/fatih/color"
 	"github.com/pterm/pterm"
 )
 
@@ -15,6 +16,25 @@ func trimString(str string, limit int) string {
 	}
 
 	return str
+}
+
+// calculateCoverage returns coverage in float64.
+func calculateCoverage(covered, total int) float64 {
+	return float64(covered) / float64(total) * 100
+}
+
+// formatImpact returns a pretty-printed string for the impact value.
+func formatImpact(impact float64) string {
+	var impactStr string
+	if impact > 5 {
+		impactStr = color.RedString("%.2f", impact)
+	} else if impact > 2 && impact < 5 {
+		impactStr = color.YellowString("%.2f", impact)
+	} else {
+		impactStr = color.GreenString("%.2f", impact)
+	}
+
+	return impactStr
 }
 
 func PrintTable(fi []*funcInfo, covered, total int, pkg bool) {
