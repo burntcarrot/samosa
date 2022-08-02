@@ -5,7 +5,6 @@ import (
 	"go/parser"
 	"go/token"
 	"io/fs"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -158,7 +157,6 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 			if err != nil {
 				return nil, 0, 0, err
 			}
-
 			for _, f := range functions {
 				c, t := f.coverage(profile)
 
@@ -191,7 +189,6 @@ func walkDir() ([]string, error) {
 		return nil, err
 	}
 	dir, _ := filepath.Split(modeFile)
-	log.Default().Println("mod file location:", dir)
 	// walk dir
 	if err := filepath.Walk(dir, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
