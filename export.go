@@ -1,4 +1,4 @@
-package internal
+package samosa
 
 import (
 	"encoding/csv"

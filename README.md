@@ -113,3 +113,10 @@ Impact = Coverage after covering the function - old coverage
 ## License
 
 Samosa is licensed under the MIT License.
+
+## TO-DO
+
+- [ ] support for local modules
+- [ ] support for auto generate coverage for module
+- [ ] add flag to receive module name in cmd prompt
+- [ ] refactor reduce third-party dependencies
