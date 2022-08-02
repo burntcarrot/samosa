@@ -41,7 +41,6 @@ func NewCmdRoot() *cobra.Command {
 }
 
 func (opts *Options) Run() error {
-	log.Default().Print("file path for coverage:", opts.File)
 	fi, covered, total, err := GetCoverageData(opts.File)
 	if err != nil {
 		log.Default().Fatalf("failed to get coverage data: %v\n", err)

@@ -1,12 +1,10 @@
 package samosa
 
 import (
-	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
 	"io/fs"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -88,7 +86,6 @@ func (f *Function) coverage(profile *cover.Profile) (int, int) {
 }
 
 func getProfiles(coverageFilePath string) ([]*cover.Profile, error) {
-	fmt.Print("starting to get profiles .....")
 	profiles, err := cover.ParseProfiles(coverageFilePath)
 	if err != nil {
 		return nil, err
@@ -155,7 +152,6 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 		if err != nil {
 			return nil, 0, 0, err
 		}
-		fmt.Printf("acquired list of files for coverage report....")
 		for _, filename := range filenames {
 			functions, err := getFunctions(filename)
 			if err != nil {
@@ -193,7 +189,6 @@ func walkDir() ([]string, error) {
 		return nil, err
 	}
 	dir, _ := filepath.Split(modeFile)
-	log.Default().Println("mod file location:", dir)
 	// walk dir
 	if err := filepath.Walk(dir, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
