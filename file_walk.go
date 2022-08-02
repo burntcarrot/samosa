@@ -5,6 +5,7 @@ import (
 	"go/parser"
 	"go/token"
 	"io/fs"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -17,7 +18,6 @@ var skipList map[string]struct{}
 func populateSkipList() {
 	skipList = map[string]struct{}{
 		".git":     {},
-		"assets":   {},
 		"testdata": {},
 	}
 
@@ -149,13 +149,11 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 	var funcInfos []*funcInfo
 
 	for _, profile := range profiles {
-
 		filenames, err := getFileNames()
 		if err != nil {
 			return nil, 0, 0, err
 		}
 		for _, filename := range filenames {
-
 			functions, err := getFunctions(filename)
 			if err != nil {
 				return nil, 0, 0, err
@@ -193,6 +191,7 @@ func walkDir() ([]string, error) {
 		return nil, err
 	}
 	dir, _ := filepath.Split(modeFile)
+	log.Default().Println("mod file location:",dir)
 	// walk dir
 	if err := filepath.Walk(dir, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
