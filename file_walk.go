@@ -191,7 +191,7 @@ func walkDir() ([]string, error) {
 		return nil, err
 	}
 	dir, _ := filepath.Split(modeFile)
-	log.Default().Println("mod file location:",dir)
+	log.Default().Println("mod file location:", dir)
 	// walk dir
 	if err := filepath.Walk(dir, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
