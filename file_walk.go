@@ -1,6 +1,7 @@
 package samosa
 
 import (
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -153,12 +154,12 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 		if err != nil {
 			return nil, 0, 0, err
 		}
+		fmt.Printf("acquired list of files for coverage report....")
 		for _, filename := range filenames {
 			functions, err := getFunctions(filename)
 			if err != nil {
 				return nil, 0, 0, err
 			}
-
 			for _, f := range functions {
 				c, t := f.coverage(profile)
 
