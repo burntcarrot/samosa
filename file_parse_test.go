@@ -6,7 +6,7 @@ import (
 
 func Test_parse(t *testing.T) {
 	testOut := make(map[string]int)
-	err := readCoverReport("./coverage.out", testOut)
+	err := readCoverReport("./testdata/coverage.out", testOut)
 	if err != nil {
 		t.Fatal(err)
 	}
