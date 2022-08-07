@@ -2,7 +2,7 @@ package samosa
 
 import "testing"
 
-func Test_walk(t *testing.T) {
+func TestWalk(t *testing.T) {
 	got := map[string]interface{}{}
 	data, err := getRoot()
 	if err != nil {
@@ -16,7 +16,7 @@ func Test_walk(t *testing.T) {
 
 }
 
-func Test_profile(t *testing.T) {
+func TestProfile(t *testing.T) {
 	_, err := getProfiles("./coverage.out")
 	if err != nil {
 		t.Log(err)
@@ -24,7 +24,7 @@ func Test_profile(t *testing.T) {
 
 }
 
-func Test_file_names(t *testing.T) {
+func TestFile_names(t *testing.T) {
 	profiles, err := getProfiles("./coverage.out")
 	if err != nil {
 		t.Log(err)
@@ -35,7 +35,7 @@ func Test_file_names(t *testing.T) {
 	}
 }
 
-func Test_walk_file(t *testing.T) {
+func TestWalk_file(t *testing.T) {
 	_, err := walkDir()
 	if err != nil {
 		t.Fatal("no error expected")
