@@ -14,9 +14,10 @@ func Test_parse(t *testing.T) {
 
 func Test_coverage(t *testing.T) {
 	inp := "25.31,27.2 4 1"
-	out := getCoverage(inp)
-	if out != 4 {
-		t.Fatalf("expected to get `4`got:%v", out)
+        want := 4
+	got := getCoverage(inp)
+	if got != want {
+		t.Fatalf("got: %v, want:%v\n", got, want)
 	}
 
 }
