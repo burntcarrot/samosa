@@ -162,7 +162,7 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 
 				fi := &funcInfo{
 					fileName:       filename,
-					pkgFileName:    filename,
+					pkgFileName:    profile.FileName,
 					functionName:   f.name,
 					startLine:      f.startLine,
 					endLine:        f.endLine,

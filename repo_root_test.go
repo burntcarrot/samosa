@@ -2,7 +2,7 @@ package samosa
 
 import "testing"
 
-func Test_root(t *testing.T) {
+func TestRoot(t *testing.T) {
 	data, err := getRoot()
 	if err != nil {
 		t.Fatalf("no err expected:%v\n", err)
@@ -13,7 +13,7 @@ func Test_root(t *testing.T) {
 
 }
 
-func Test_decode(t *testing.T) {
+func TestDecode(t *testing.T) {
 	got := map[string]interface{}{}
 	data, err := getRoot()
 	if err != nil {
@@ -25,7 +25,7 @@ func Test_decode(t *testing.T) {
 	}
 }
 
-func Test_mod_dir(t *testing.T) {
+func TestModDir(t *testing.T) {
 	got := map[string]interface{}{}
 	data, err := getRoot()
 	if err != nil {
@@ -36,5 +36,4 @@ func Test_mod_dir(t *testing.T) {
 	if len(want) < 1 {
 		t.Fatal("expected to get complete go.mod path for the repo")
 	}
-
 }

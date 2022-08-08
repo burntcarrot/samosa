@@ -3,7 +3,6 @@ module github.com/ehrktia/samosa
 go 1.17
 
 require (
-	github.com/burntcarrot/samosa v0.0.0-20220522131454-61e55a9cba6d
 	github.com/fatih/color v1.13.0
 	github.com/pterm/pterm v0.12.39
 	github.com/spf13/cobra v1.4.0

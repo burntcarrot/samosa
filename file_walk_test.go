@@ -10,22 +10,19 @@ func TestWalk(t *testing.T) {
 	}
 	decodeJSON(data, got)
 	want := getModDir(got)
-	slice, err := walkModDir(want)
-	t.Logf("dir list:%v\n", slice)
-	t.Logf("err:%v\n", err)
-
+	_, err = walkModDir(want)
 }
 
 func TestProfile(t *testing.T) {
-	_, err := getProfiles("./coverage.out")
+	_, err := getProfiles("./testdata/test_coverage.txt")
 	if err != nil {
 		t.Log(err)
 	}
 
 }
 
-func TestFile_names(t *testing.T) {
-	profiles, err := getProfiles("./coverage.out")
+func TestFilenames(t *testing.T) {
+	profiles, err := getProfiles("./testdata/test_coverage.txt")
 	if err != nil {
 		t.Log(err)
 	}
@@ -35,7 +32,7 @@ func TestFile_names(t *testing.T) {
 	}
 }
 
-func TestWalk_file(t *testing.T) {
+func TestWalkFile(t *testing.T) {
 	_, err := walkDir()
 	if err != nil {
 		t.Fatal("no error expected")

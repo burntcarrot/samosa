@@ -7,8 +7,6 @@ github.com/MarvinJWendt/testza v0.2.15 h1:suR1fQ/folIjEJw4GTbIBahhmZ16zatr9JghbS
 github.com/MarvinJWendt/testza v0.2.15/go.mod h1:eFcL4I0idjtIx8P9C6KkAuLgATNKpX4/2oUqKc6bF2c=
 github.com/atomicgo/cursor v0.0.1 h1:xdogsqa6YYlLfM+GyClC/Lchf7aiMerFiZQn7soTOoU=
 github.com/atomicgo/cursor v0.0.1/go.mod h1:cBON2QmmrysudxNBFthvMtN32r3jxVRIvzkUiF/RuIk=
-github.com/burntcarrot/samosa v0.0.0-20220522131454-61e55a9cba6d h1:vevhfFhlDawDQLaiJgUaKc//i6sEEUo/MnqaZEf67mY=
-github.com/burntcarrot/samosa v0.0.0-20220522131454-61e55a9cba6d/go.mod h1:Avpdcu0rFrqKluQxUePSZPXhOapEyhN9UN1DT4rj7CE=
 github.com/cpuguy83/go-md2man/v2 v2.0.1/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

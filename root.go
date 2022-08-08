@@ -29,7 +29,7 @@ func NewCmdRoot() *cobra.Command {
 			return opts.Run()
 		},
 	}
-	cmd.Flags().StringVarP(&opts.File, "file", "f", "", "Coverage file path")
+	cmd.Flags().StringVarP(&opts.File, "file", "f", "coverage.out", "Coverage file path")
 	cmd.Flags().StringVarP(&opts.FilterOptions.Include, "include", "i", "", "Include results for specified file")
 	cmd.Flags().StringVarP(&opts.FilterOptions.Exclude, "exclude", "x", "", "Exclude results for specified file")
 	cmd.Flags().StringVarP(&opts.OutputFile, "output", "o", "", "Output filename for exporting results")

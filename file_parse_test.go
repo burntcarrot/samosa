@@ -4,17 +4,17 @@ import (
 	"testing"
 )
 
-func Test_parse(t *testing.T) {
+func TestParse(t *testing.T) {
 	testOut := make(map[string]int)
-	err := readCoverReport("./testdata/coverage.out", testOut)
+	err := readCoverReport("./testdata/test_coverage.txt", testOut)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
-func Test_coverage(t *testing.T) {
+func TestCoverage(t *testing.T) {
 	inp := "25.31,27.2 4 1"
-        want := 4
+	want := 4
 	got := getCoverage(inp)
 	if got != want {
 		t.Fatalf("got: %v, want:%v\n", got, want)
@@ -22,7 +22,7 @@ func Test_coverage(t *testing.T) {
 
 }
 
-func Test_increment(t *testing.T) {
+func TestIncrement(t *testing.T) {
 	inpMap := make(map[string]int)
 	mapKey := t.Name()
 	value := 1
