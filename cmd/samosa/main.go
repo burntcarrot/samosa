@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/ehrktia/samosa"
+	"github.com/burntcarrot/samosa"
 )
 
 func main() {
