@@ -23,12 +23,10 @@ func TestGetCoverageData(t *testing.T) {
 		},
 	}
 
-	t.Run("", func(t *testing.T) {
-		for _, tc := range tests {
-			_, _, _, err := GetCoverageData(tc.filename)
-			if err != nil && !tc.wantErr {
-				t.Fatalf("test failed (%s): %v\n", tc.description, err.Error())
-			}
+	for _, tc := range tests {
+		_, _, _, err := GetCoverageData(tc.filename)
+		if err != nil && !tc.wantErr {
+			t.Fatalf("test failed (%s): %v\n", tc.description, err.Error())
 		}
-	})
+	}
 }

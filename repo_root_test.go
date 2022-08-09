@@ -1,16 +1,19 @@
 package samosa
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
 func TestRoot(t *testing.T) {
-	data, err := getRoot()
+	got, err := getRoot()
 	if err != nil {
-		t.Fatalf("no err expected:%v\n", err)
-	}
-	if len(data) < 1 {
-		t.Fatalf("non empty data is expected")
+		t.Fatalf("test failed: %v\n", err.Error())
 	}
 
+	if len(got) < 1 {
+		t.Fatalf("test failed: %v\n", errors.New("non empty data expected"))
+	}
 }
 
 func TestDecode(t *testing.T) {
@@ -19,21 +22,21 @@ func TestDecode(t *testing.T) {
 	if err != nil {
 		t.Fatalf("no err expected:%v\n", err)
 	}
+
 	decodeJSON(data, got)
+
 	if len(got) < 1 {
 		t.Fatal("expected to decode all values got empty")
 	}
 }
 
-func TestModDir(t *testing.T) {
-	got := map[string]interface{}{}
-	data, err := getRoot()
+func TestGetMod(t *testing.T) {
+	got, err := getMod()
 	if err != nil {
 		t.Fatalf("no err expected:%v\n", err)
 	}
-	decodeJSON(data, got)
-	want := getModDir(got)
-	if len(want) < 1 {
+
+	if len(got) < 1 {
 		t.Fatal("expected to get complete go.mod path for the repo")
 	}
 }
