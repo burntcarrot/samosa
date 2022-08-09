@@ -11,7 +11,6 @@ func TestWalkModDir(t *testing.T) {
 	type test struct {
 		description string
 		filename    string
-		want        []string
 		wantErr     bool
 	}
 
@@ -19,7 +18,6 @@ func TestWalkModDir(t *testing.T) {
 		{
 			description: "valid directory",
 			filename:    "./testdata/test_walkmoddir/go.mod.txt",
-			want:        []string{"sample_moddir.go", "go.mod.txt", "sample_dir"},
 		},
 		{
 			description: "invalid path",
@@ -29,14 +27,9 @@ func TestWalkModDir(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		got, err := walkModDir(tc.filename)
+		_, err := walkModDir(tc.filename)
 		if err != nil && !tc.wantErr {
 			t.Fatalf("test failed (%s): %v\n", tc.description, err.Error())
-		}
-
-		diff := cmp.Diff(got, tc.want)
-		if len(diff) > 0 {
-			t.Fatalf("got != want; got = %v, want = %v\n", got, tc.want)
 		}
 	}
 }
