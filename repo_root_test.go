@@ -23,7 +23,10 @@ func TestDecode(t *testing.T) {
 		t.Fatalf("no err expected:%v\n", err)
 	}
 
-	decodeJSON(data, got)
+	err = decodeJSON(data, got)
+	if err != nil {
+		t.Fatalf("no err expected:%v\n", err)
+	}
 
 	if len(got) < 1 {
 		t.Fatal("expected to decode all values got empty")

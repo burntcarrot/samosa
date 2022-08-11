@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"sort"
 
-	"github.com/thoas/go-funk"
+	funk "github.com/thoas/go-funk"
 )
 
 func FilterFunctionInfo(fi []funcInfo, filterOpts FilterOptions) ([]funcInfo, error) {

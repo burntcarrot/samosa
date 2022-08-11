@@ -47,14 +47,7 @@ func convertJSON(funcInfos []funcInfo) []FuncInfoExport {
 	var occurences []FuncInfoExport
 
 	for _, fi := range funcInfos {
-		functionInfo := FuncInfoExport{
-			FileName:       fi.FileName,
-			PkgFileName:    fi.PkgFileName,
-			FunctionName:   fi.FunctionName,
-			StartLine:      fi.StartLine,
-			EndLine:        fi.EndLine,
-			UncoveredLines: fi.UncoveredLines,
-		}
+		functionInfo := FuncInfoExport(fi)
 
 		occurences = append(occurences, functionInfo)
 	}
