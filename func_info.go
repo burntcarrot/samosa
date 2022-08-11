@@ -7,8 +7,8 @@ import (
 	"github.com/thoas/go-funk"
 )
 
-func FilterFunctionInfo(fi []*funcInfo, filterOpts FilterOptions) ([]*funcInfo, error) {
-	var filteredFuncInfo []*funcInfo
+func FilterFunctionInfo(fi []funcInfo, filterOpts FilterOptions) ([]funcInfo, error) {
+	var filteredFuncInfo []funcInfo
 	var err error
 
 	if filterOpts.Include != "" {
@@ -22,7 +22,7 @@ func FilterFunctionInfo(fi []*funcInfo, filterOpts FilterOptions) ([]*funcInfo, 
 			return nil, err
 		}
 
-		filteredFuncInfo = funk.Subtract(fi, filteredFuncInfo).([]*funcInfo)
+		filteredFuncInfo = funk.Subtract(fi, filteredFuncInfo).([]funcInfo)
 	} else {
 		filteredFuncInfo = fi
 	}
@@ -36,31 +36,31 @@ func FilterFunctionInfo(fi []*funcInfo, filterOpts FilterOptions) ([]*funcInfo, 
 	return fi, nil
 }
 
-func filterByRegex(pattern string, fi []*funcInfo) ([]*funcInfo, error) {
+func filterByRegex(pattern string, fi []funcInfo) ([]funcInfo, error) {
 	r, err := regexp.Compile(pattern)
 	if err != nil {
 		return nil, err
 	}
 
-	filteredFuncInfo := funk.Filter(fi, func(f *funcInfo) bool {
-		return r.Match([]byte(f.fileName))
-	}).([]*funcInfo)
+	filteredFuncInfo := funk.Filter(fi, func(f funcInfo) bool {
+		return r.Match([]byte(f.FileName))
+	}).([]funcInfo)
 
 	return filteredFuncInfo, nil
 }
 
 // sortFuncInfo returns function information sorted by the number of uncovered lines.
-func sortFuncInfo(fi []*funcInfo) []*funcInfo {
-	var filteredFuncInfos []*funcInfo
+func sortFuncInfo(fi []funcInfo) []funcInfo {
+	var filteredFuncInfos []funcInfo
 
 	for _, f := range fi {
-		if f.uncoveredLines > 0 {
+		if f.UncoveredLines > 0 {
 			filteredFuncInfos = append(filteredFuncInfos, f)
 		}
 	}
 
 	sort.Slice(filteredFuncInfos, func(i, j int) bool {
-		return filteredFuncInfos[i].uncoveredLines > filteredFuncInfos[j].uncoveredLines
+		return filteredFuncInfos[i].UncoveredLines > filteredFuncInfos[j].UncoveredLines
 	})
 
 	return filteredFuncInfos

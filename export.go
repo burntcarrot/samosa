@@ -19,7 +19,7 @@ type FuncInfoExport struct {
 	UncoveredLines int    `json:"uncovered_lines"`
 }
 
-func ExportJSON(filename string, fi []*funcInfo) (err error) {
+func ExportJSON(filename string, fi []funcInfo) (err error) {
 	funcInfosJSON := convertJSON(fi)
 	if err != nil {
 		return err
@@ -43,17 +43,17 @@ func ExportJSON(filename string, fi []*funcInfo) (err error) {
 	return nil
 }
 
-func convertJSON(funcInfos []*funcInfo) []FuncInfoExport {
+func convertJSON(funcInfos []funcInfo) []FuncInfoExport {
 	var occurences []FuncInfoExport
 
 	for _, fi := range funcInfos {
 		functionInfo := FuncInfoExport{
-			FileName:       fi.fileName,
-			PkgFileName:    fi.pkgFileName,
-			FunctionName:   fi.functionName,
-			StartLine:      fi.startLine,
-			EndLine:        fi.endLine,
-			UncoveredLines: fi.uncoveredLines,
+			FileName:       fi.FileName,
+			PkgFileName:    fi.PkgFileName,
+			FunctionName:   fi.FunctionName,
+			StartLine:      fi.StartLine,
+			EndLine:        fi.EndLine,
+			UncoveredLines: fi.UncoveredLines,
 		}
 
 		occurences = append(occurences, functionInfo)
@@ -62,7 +62,7 @@ func convertJSON(funcInfos []*funcInfo) []FuncInfoExport {
 	return occurences
 }
 
-func ExportCSV(filename string, fi []*funcInfo) error {
+func ExportCSV(filename string, fi []funcInfo) error {
 	records := convertCSV(fi)
 
 	if filename == "" {
@@ -89,11 +89,11 @@ func ExportCSV(filename string, fi []*funcInfo) error {
 	return nil
 }
 
-func convertCSV(funcInfos []*funcInfo) [][]string {
+func convertCSV(funcInfos []funcInfo) [][]string {
 	records := [][]string{{"file", "pkg_file", "function", "start_line", "end_line", "uncovered_lines"}}
 
 	for _, fi := range funcInfos {
-		functionInfo := []string{fi.fileName, fi.pkgFileName, fi.functionName, fmt.Sprint(fi.startLine), fmt.Sprint(fi.endLine), fmt.Sprint(fi.uncoveredLines)}
+		functionInfo := []string{fi.FileName, fi.PkgFileName, fi.FunctionName, fmt.Sprint(fi.StartLine), fmt.Sprint(fi.EndLine), fmt.Sprint(fi.UncoveredLines)}
 
 		records = append(records, functionInfo)
 	}

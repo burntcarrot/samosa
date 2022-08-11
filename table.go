@@ -37,7 +37,7 @@ func formatImpact(impact float64) string {
 	return impactStr
 }
 
-func PrintTable(fi []*funcInfo, covered, total int, pkg bool) {
+func PrintTable(fi []funcInfo, covered, total int, pkg bool) {
 	table := make([][]string, len(fi)+1)
 
 	table[0] = []string{"File", "Function", "Impact", "Uncovered Lines", "Start Line", "End Line"}
@@ -47,16 +47,16 @@ func PrintTable(fi []*funcInfo, covered, total int, pkg bool) {
 	for i, f := range fi {
 		var fileName string
 		if pkg {
-			fileName = f.pkgFileName
+			fileName = f.PkgFileName
 		} else {
-			fileName = f.fileName
+			fileName = f.FileName
 		}
 
-		impact := calculateCoverage((covered+f.uncoveredLines), total) - totalCoverage
+		impact := calculateCoverage((covered+f.UncoveredLines), total) - totalCoverage
 
 		impactStr := formatImpact(impact)
 
-		table[i+1] = []string{trimString(fileName, TRIM_LIMIT), f.functionName, impactStr, fmt.Sprint(f.uncoveredLines), fmt.Sprint(f.startLine), fmt.Sprint(f.endLine)}
+		table[i+1] = []string{trimString(fileName, TRIM_LIMIT), f.FunctionName, impactStr, fmt.Sprint(f.UncoveredLines), fmt.Sprint(f.StartLine), fmt.Sprint(f.EndLine)}
 	}
 
 	err := pterm.DefaultTable.WithSeparator("\t").WithData(table).WithHasHeader(true).Render()

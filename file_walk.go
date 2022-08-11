@@ -134,18 +134,18 @@ func (v *Visitor) Visit(node ast.Node) ast.Visitor {
 }
 
 type funcInfo struct {
-	fileName       string
-	pkgFileName    string
-	functionName   string
-	startLine      int
-	endLine        int
-	uncoveredLines int
+	FileName       string
+	PkgFileName    string
+	FunctionName   string
+	StartLine      int
+	EndLine        int
+	UncoveredLines int
 }
 
-func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
+func getFunctionInfo(profiles []*cover.Profile) ([]funcInfo, int, int, error) {
 	total := 0
 	covered := 0
-	var funcInfos []*funcInfo
+	var funcInfos []funcInfo
 
 	for _, profile := range profiles {
 		filenames, err := getFileNames()
@@ -160,13 +160,13 @@ func getFunctionInfo(profiles []*cover.Profile) ([]*funcInfo, int, int, error) {
 			for _, f := range functions {
 				c, t := f.coverage(profile)
 
-				fi := &funcInfo{
-					fileName:       filename,
-					pkgFileName:    profile.FileName,
-					functionName:   f.name,
-					startLine:      f.startLine,
-					endLine:        f.endLine,
-					uncoveredLines: t - c,
+				fi := funcInfo{
+					FileName:       filename,
+					PkgFileName:    profile.FileName,
+					FunctionName:   f.name,
+					StartLine:      f.startLine,
+					EndLine:        f.endLine,
+					UncoveredLines: t - c,
 				}
 
 				funcInfos = append(funcInfos, fi)
