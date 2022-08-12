@@ -1,12 +1,17 @@
-package command
+package samosa
 
 import (
-	"log"
+	"fmt"
 	"strings"
 
-	"github.com/burntcarrot/samosa/internal"
 	"github.com/spf13/cobra"
 )
+
+type FilterOptions struct {
+	Include  string
+	Exclude  string
+	SortFile bool
+}
 
 type Options struct {
 	File          string
@@ -17,11 +22,6 @@ type Options struct {
 	FilterOptions FilterOptions
 }
 
-type FilterOptions struct {
-	Include string
-	Exclude string
-}
-
 func NewCmdRoot() *cobra.Command {
 	opts := Options{}
 	cmd := &cobra.Command{
@@ -29,7 +29,7 @@ func NewCmdRoot() *cobra.Command {
 			return opts.Run()
 		},
 	}
-	cmd.Flags().StringVarP(&opts.File, "file", "f", "", "Coverage file path")
+	cmd.Flags().StringVarP(&opts.File, "file", "f", "coverage.out", "Coverage file path")
 	cmd.Flags().StringVarP(&opts.FilterOptions.Include, "include", "i", "", "Include results for specified file")
 	cmd.Flags().StringVarP(&opts.FilterOptions.Exclude, "exclude", "x", "", "Exclude results for specified file")
 	cmd.Flags().StringVarP(&opts.OutputFile, "output", "o", "", "Output filename for exporting results")
@@ -41,35 +41,35 @@ func NewCmdRoot() *cobra.Command {
 }
 
 func (opts *Options) Run() error {
-	fi, covered, total, err := internal.GetCoverageData(opts.File)
+	fi, covered, total, err := GetCoverageData(opts.File)
 	if err != nil {
-		log.Fatalf("failed to get coverage data: %v\n", err)
+		return fmt.Errorf("failed to get coverage data: %v", err)
 	}
 
-	filterOpts := internal.FilterOptions{
+	filterOpts := FilterOptions{
 		Include:  opts.FilterOptions.Include,
 		Exclude:  opts.FilterOptions.Exclude,
 		SortFile: opts.SortFile,
 	}
 
-	fi, err = internal.FilterFunctionInfo(fi, filterOpts)
+	fi, err = FilterFunctionInfo(fi, filterOpts)
 	if err != nil {
-		log.Fatalf("failed to get function info: %v\n", err)
+		return fmt.Errorf("failed to get function info: %v", err)
 	}
 
 	if opts.File != "" {
 		switch strings.TrimSpace(opts.Export) {
 		case "json":
-			err = internal.ExportJSON(opts.OutputFile, fi)
+			err = ExportJSON(opts.OutputFile, fi)
 		case "csv":
-			err = internal.ExportCSV(opts.OutputFile, fi)
+			err = ExportCSV(opts.OutputFile, fi)
 		default:
-			internal.PrintTable(fi, covered, total, opts.Pkg)
+			err = PrintTable(fi, covered, total, opts.Pkg)
 		}
 	}
 
 	if err != nil {
-		log.Fatalf("failed to export results: %v\n", err)
+		return fmt.Errorf("failed to export results: %v", err)
 	}
 
 	return nil

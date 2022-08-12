@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 
-	"github.com/burntcarrot/samosa/command"
+	"github.com/burntcarrot/samosa"
 )
 
 func main() {
-	if err := command.Execute(); err != nil {
+	if err := samosa.Execute(); err != nil {
 		log.Fatalf("failed to start samosa: %v\n", err)
 	}
 }
