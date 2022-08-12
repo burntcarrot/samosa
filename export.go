@@ -4,7 +4,6 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/pterm/pterm"
@@ -35,7 +34,7 @@ func ExportJSON(filename string, fi []funcInfo) (err error) {
 		return nil
 	}
 
-	if err = ioutil.WriteFile(filename, data, 0644); err != nil {
+	if err = os.WriteFile(filename, data, 0644); err != nil {
 		return err
 	}
 

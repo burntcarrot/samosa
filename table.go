@@ -2,7 +2,6 @@ package samosa
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/fatih/color"
 	"github.com/pterm/pterm"
@@ -37,7 +36,7 @@ func formatImpact(impact float64) string {
 	return impactStr
 }
 
-func PrintTable(fi []funcInfo, covered, total int, pkg bool) {
+func PrintTable(fi []funcInfo, covered, total int, pkg bool) error {
 	table := make([][]string, len(fi)+1)
 
 	table[0] = []string{"File", "Function", "Impact", "Uncovered Lines", "Start Line", "End Line"}
@@ -61,6 +60,8 @@ func PrintTable(fi []funcInfo, covered, total int, pkg bool) {
 
 	err := pterm.DefaultTable.WithSeparator("\t").WithData(table).WithHasHeader(true).Render()
 	if err != nil {
-		log.Fatalf("failed to display results: %v\n", err)
+		return fmt.Errorf("failed to display results: %v", err)
 	}
+
+	return nil
 }
