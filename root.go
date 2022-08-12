@@ -1,7 +1,7 @@
 package samosa
 
 import (
-	"log"
+	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -43,7 +43,7 @@ func NewCmdRoot() *cobra.Command {
 func (opts *Options) Run() error {
 	fi, covered, total, err := GetCoverageData(opts.File)
 	if err != nil {
-		log.Default().Fatalf("failed to get coverage data: %v\n", err)
+		return fmt.Errorf("failed to get coverage data: %v", err)
 	}
 
 	filterOpts := FilterOptions{
@@ -54,7 +54,7 @@ func (opts *Options) Run() error {
 
 	fi, err = FilterFunctionInfo(fi, filterOpts)
 	if err != nil {
-		log.Fatalf("failed to get function info: %v\n", err)
+		return fmt.Errorf("failed to get function info: %v", err)
 	}
 
 	if opts.File != "" {
@@ -64,12 +64,12 @@ func (opts *Options) Run() error {
 		case "csv":
 			err = ExportCSV(opts.OutputFile, fi)
 		default:
-			PrintTable(fi, covered, total, opts.Pkg)
+			err = PrintTable(fi, covered, total, opts.Pkg)
 		}
 	}
 
 	if err != nil {
-		log.Fatalf("failed to export results: %v\n", err)
+		return fmt.Errorf("failed to export results: %v", err)
 	}
 
 	return nil
